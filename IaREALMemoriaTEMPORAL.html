@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IA Reflexiva Variada</title>
+<style>
+body { font-family: Arial, sans-serif; background:#111; color:#eee; display:flex; justify-content:center; align-items:flex-start; flex-direction:column; padding:20px; min-height:100vh;}
+input, button { padding:10px; margin:5px 0; width:300px; border-radius:5px; border:none; outline:none;}
+button { cursor:pointer; background:#2563eb; color:#fff;}
+#log { margin-top:20px; background:#222; padding:10px; max-height:400px; overflow:auto; border-radius:5px; width:320px;}
+span { display:block; margin-bottom:6px;}
+.user { color:#facc15;}
+ai { color:#34d399;}
+</style>
+</head>
+<body>
+
+<h2>IA Reflexiva Variada</h2>
+
+<input id="userInput" placeholder="Compartilhe seus pensamentos...">
+<button id="sendBtn">Enviar</button>
+
+<div id="log"></div>
+
+<script>
+// Memória esquerda → direita
+let memoryLR = [];
+
+// Função memória reversa
+function memoryRL(){ return [...memoryLR].reverse(); }
+
+// Função para log
+function log(msg, type="ai"){ 
+    const logDiv = document.getElementById("log");
+    const span = document.createElement("span");
+    span.textContent = msg;
+    span.className = type;
+    logDiv.appendChild(span);
+    logDiv.scrollTop = logDiv.scrollHeight;
+}
+
+// Função para baralhar palavras
+function shuffleWords(str){
+    let words = str.split(' ');
+    for (let i = words.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [words[i], words[j]] = [words[j], words[i]];
+    }
+    return words.join(' ');
+}
+
+// Função de reflexão com variação
+function reflect(input){
+    memoryLR.push(input);
+    const reversed = memoryRL();
+    
+    // Pegar últimas palavras do usuário
+    let lastWords = reversed.slice(0,5).join(' ');
+    
+    // Baralhar para criar respostas variadas
+    let shuffled = shuffleWords(lastWords);
+    
+    // Criar resposta reflexiva
+    let response = `🌿 Você disse: "${input}". Reflita sobre: "${shuffled}"`;
+    
+    return response;
+}
+
+// Envio do input
+document.getElementById("sendBtn").addEventListener("click", ()=>{
+    const input = document.getElementById("userInput").value.trim();
+    if(!input) return;
+    
+    log("Você: " + input, "user");
+    const response = reflect(input);
+    log("IA: " + response, "ai");
+    document.getElementById("userInput").value = "";
+});
+
+// Enter para enviar
+document.getElementById("userInput").addEventListener("keypress", (e)=>{
+    if(e.key === "Enter") document.getElementById("sendBtn").click();
+});
+</script>
+
+</body>
+</html>
+
+
