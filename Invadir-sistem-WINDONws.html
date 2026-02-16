@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Windows Defensive Playbook PRO</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+tailwind.config = {
+    darkMode: 'class'
+}
+</script>
+
+<style>
+.card:hover{
+    transform: translateY(-4px);
+    transition: 0.3s;
+}
+.risk-high{ background:#7f1d1d; }
+.risk-medium{ background:#78350f; }
+.risk-low{ background:#064e3b; }
+</style>
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900 dark:text-gray-200 min-h-screen">
+
+<header class="bg-black text-green-400 py-6 text-center text-2xl font-bold">
+Windows Defensive Playbook PRO
+</header>
+
+<main class="container mx-auto p-6">
+
+<input id="search" placeholder="Buscar comando..."
+class="w-full mb-6 p-3 rounded bg-white dark:bg-gray-800">
+
+<div id="container" class="grid md:grid-cols-2 gap-6"></div>
+
+</main>
+
+<script>
+
+const commands = [
+
+{
+name:"net user",
+category:"security",
+description:"Gerencia contas de usuário locais.",
+abuse:"Criação de conta administrativa para persistência.",
+detect:"Monitorar Event ID 4720 (User Created) e 4732 (Added to Admin Group).",
+defense:"Restringir privilégios administrativos e auditar criação de contas.",
+risk:"high"
+},
+
+{
+name:"taskkill",
+category:"process",
+description:"Finaliza processos em execução.",
+abuse:"Encerrar antivírus ou ferramentas de monitoramento.",
+detect:"Event ID 4688 (Process Creation) com linha de comando suspeita.",
+defense:"Usar proteção anti-tampering no antivírus.",
+risk:"medium"
+},
+
+{
+name:"ipconfig",
+category:"network",
+description:"Mostra configurações de rede.",
+abuse:"Reconhecimento inicial do ambiente.",
+detect:"Monitorar execução incomum em servidores críticos.",
+defense:"Segregar privilégios e monitorar comportamento anômalo.",
+risk:"low"
+},
+
+{
+name:"whoami",
+category:"security",
+description:"Exibe o usuário atual e privilégios.",
+abuse:"Enumeração de privilégios antes de escalar acesso.",
+detect:"Sequência whoami + net user pode indicar enumeração.",
+defense:"Monitoramento comportamental.",
+risk:"medium"
+},
+
+{
+name:"sfc /scannow",
+category:"system",
+description:"Verifica integridade de arquivos do sistema.",
+abuse:"Raramente abusado diretamente, mas pode mascarar alterações.",
+detect:"Monitorar execução fora de janela de manutenção.",
+defense:"Controle de mudança documentado.",
+risk:"low"
+},
+
+{
+name:"robocopy",
+category:"file",
+description:"Cópia avançada de arquivos.",
+abuse:"Exfiltração de dados em larga escala.",
+detect:"Monitorar grande volume de leitura e escrita.",
+defense:"DLP e controle de acesso a diretórios sensíveis.",
+risk:"high"
+},
+
+{
+name:"Get-Process",
+category:"powershell",
+description:"Lista processos ativos.",
+abuse:"Reconhecimento interno via PowerShell.",
+detect:"Monitorar logs 4104 (Script Block Logging).",
+defense:"Ativar PowerShell logging avançado.",
+risk:"medium"
+}
+
+];
+
+const container = document.getElementById("container");
+const search = document.getElementById("search");
+
+function render(data){
+container.innerHTML="";
+
+data.forEach(cmd=>{
+const card = document.createElement("div");
+
+let riskColor = cmd.risk==="high" ? "risk-high" :
+                cmd.risk==="medium" ? "risk-medium" :
+                "risk-low";
+
+card.className=`card p-6 rounded-xl shadow text-white ${riskColor}`;
+
+card.innerHTML=`
+<h2 class="text-xl font-bold mb-2">${cmd.name}</h2>
+<p class="mb-2"><strong>Descrição:</strong> ${cmd.description}</p>
+<p class="mb-2"><strong>Possível Abuso:</strong> ${cmd.abuse}</p>
+<p class="mb-2"><strong>Detecção:</strong> ${cmd.detect}</p>
+<p><strong>Defesa:</strong> ${cmd.defense}</p>
+<p class="mt-3 text-sm">Nível de Risco: ${cmd.risk.toUpperCase()}</p>
+`;
+
+container.appendChild(card);
+});
+}
+
+search.addEventListener("input",()=>{
+const value = search.value.toLowerCase();
+const filtered = commands.filter(c=>c.name.toLowerCase().includes(value));
+render(filtered);
+});
+
+render(commands);
+
+</script>
+<p>Copiar bakap do powershel e colar resultados na barra pesquisa WINDOW comando a usar==sfc /scannow</p>
+</body>
+</html>
