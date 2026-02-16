@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows 2026 Commands Reference</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb',
+                        secondary: '#1e40af',
+                        dark: '#0f172a'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .command-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .category-btn.active {
+            background-color: #2563eb;
+            color: white;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+
+<body class="bg-gray-50 min-h-screen">
+
+<!-- HEADER -->
+<header class="bg-gradient-to-r from-primary to-secondary text-white shadow-lg">
+    <div class="container mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-center">
+        <div class="flex items-center mb-4 md:mb-0">
+            <i class="fas fa-terminal text-3xl mr-3"></i>
+            <h1 class="text-3xl font-bold">Windows 2026 Commands</h1>
+        </div>
+
+        <div class="relative w-full md:w-1/3">
+            <input type="text" id="searchInput" placeholder="Buscar comandos..."
+                class="w-full px-4 py-2 rounded-lg bg-white/20 backdrop-blur-sm border border-white/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white">
+            <i class="fas fa-search absolute right-3 top-3 text-white/70"></i>
+        </div>
+    </div>
+</header>
+
+<!-- CATEGORY NAV -->
+<nav class="bg-white shadow-md sticky top-0 z-10">
+    <div class="container mx-auto px-4">
+        <div class="flex overflow-x-auto py-3 space-x-2 hide-scrollbar">
+            <button class="category-btn active px-4 py-2 rounded-full text-sm font-medium" data-category="all">Todos</button>
+            <button class="category-btn px-4 py-2 rounded-full text-sm font-medium" data-category="system">Sistema</button>
+            <button class="category-btn px-4 py-2 rounded-full text-sm font-medium" data-category="network">Rede</button>
+            <button class="category-btn px-4 py-2 rounded-full text-sm font-medium" data-category="file">Arquivos</button>
+            <button class="category-btn px-4 py-2 rounded-full text-sm font-medium" data-category="process">Processos</button>
+            <button class="category-btn px-4 py-2 rounded-full text-sm font-medium" data-category="security">Segurança</button>
+            <button class="category-btn px-4 py-2 rounded-full text-sm font-medium" data-category="powershell">PowerShell</button>
+        </div>
+    </div>
+</nav>
+
+<!-- MAIN -->
+<main class="container mx-auto px-4 py-8">
+
+    <!-- STATS -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white rounded-xl shadow-md p-6 flex items-center">
+            <div class="rounded-full bg-blue-100 p-3 mr-4">
+                <i class="fas fa-list text-blue-600"></i>
+            </div>
+            <div>
+                <p class="text-gray-500 text-sm">Total Comandos</p>
+                <p class="text-2xl font-bold" id="totalCommands">0</p>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-md p-6 flex items-center">
+            <div class="rounded-full bg-green-100 p-3 mr-4">
+                <i class="fas fa-cogs text-green-600"></i>
+            </div>
+            <div>
+                <p class="text-gray-500 text-sm">Categorias</p>
+                <p class="text-2xl font-bold">7</p>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-md p-6 flex items-center">
+            <div class="rounded-full bg-yellow-100 p-3 mr-4">
+                <i class="fas fa-star text-yellow-600"></i>
+            </div>
+            <div>
+                <p class="text-gray-500 text-sm">Novidades 2026</p>
+                <p class="text-2xl font-bold">4</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- COMMAND GRID -->
+    <div id="commandsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+    <!-- NO RESULTS -->
+    <div id="noResults" class="hidden text-center py-12">
+        <i class="fas fa-search text-5xl text-gray-300 mb-4"></i>
+        <h3 class="text-xl font-semibold text-gray-700">Nenhum comando encontrado</h3>
+    </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="bg-dark text-white py-6 mt-12 text-center">
+    <p>&copy; 2026 Windows Commands Guide</p>
+</footer>
+
+<script>
+
+const commandsData = [
+{ id:1, command:"systeminfo", category:"system", description:"Exibe informações detalhadas do sistema.", usage:"systeminfo", example:"systeminfo", privilege:"Usuário", new2026:false },
+{ id:2, command:"tasklist", category:"process", description:"Lista processos em execução.", usage:"tasklist", example:"tasklist", privilege:"Usuário", new2026:false },
+{ id:3, command:"taskkill", category:"process", description:"Encerra processos pelo nome ou PID.", usage:"taskkill /im nome.exe /f", example:"taskkill /im notepad.exe /f", privilege:"Administrador", new2026:false },
+{ id:4, command:"sfc /scannow", category:"system", description:"Verifica e repara arquivos do sistema.", usage:"sfc /scannow", example:"sfc /scannow", privilege:"Administrador", new2026:false },
+{ id:5, command:"chkdsk", category:"system", description:"Verifica erros no disco.", usage:"chkdsk C: /f", example:"chkdsk C: /f", privilege:"Administrador", new2026:false },
+{ id:6, command:"netstat", category:"network", description:"Mostra conexões de rede.", usage:"netstat -ano", example:"netstat -ano", privilege:"Usuário", new2026:false },
+{ id:7, command:"ipconfig", category:"network", description:"Mostra configurações IP.", usage:"ipconfig /all", example:"ipconfig /all", privilege:"Usuário", new2026:false },
+{ id:8, command:"ping", category:"network", description:"Testa conectividade.", usage:"ping google.com", example:"ping google.com", privilege:"Usuário", new2026:false },
+{ id:9, command:"dir", category:"file", description:"Lista arquivos.", usage:"dir", example:"dir C:\\", privilege:"Usuário", new2026:false },
+{ id:10, command:"copy", category:"file", description:"Copia arquivos.", usage:"copy origem destino", example:"copy a.txt b.txt", privilege:"Usuário", new2026:false },
+{ id:11, command:"net user", category:"security", description:"Gerencia usuários.", usage:"net user nome senha /add", example:"net user joao 123 /add", privilege:"Administrador", new2026:false },
+{ id:12, command:"Get-Process", category:"powershell", description:"Lista processos via PowerShell.", usage:"Get-Process", example:"Get-Process", privilege:"Usuário", new2026:false },
+
+{ id:13, command:"wininit2026", category:"system", description:"(NOVO 2026) Reinicia serviços críticos.", usage:"wininit2026 /force", example:"wininit2026 /force", privilege:"Sistema", new2026:true },
+{ id:14, command:"cloudsync", category:"file", description:"(NOVO 2026) Sincroniza arquivos com nuvem.", usage:"cloudsync origem destino", example:"cloudsync C:\\Data Cloud:/Backup", privilege:"Usuário", new2026:true },
+{ id:15, command:"netsecure", category:"security", description:"(NOVO 2026) Analisa vulnerabilidades de rede.", usage:"netsecure /scan", example:"netsecure /scan", privilege:"Administrador", new2026:true },
+{ id:16, command:"aioptimize", category:"system", description:"(NOVO 2026) Otimiza desempenho com IA.", usage:"aioptimize /performance", example:"aioptimize /performance", privilege:"Administrador", new2026:true }
+];
+
+const container = document.getElementById("commandsContainer");
+const searchInput = document.getElementById("searchInput");
+const categoryButtons = document.querySelectorAll(".category-btn");
+const totalCommands = document.getElementById("totalCommands");
+const noResults = document.getElementById("noResults");
+
+totalCommands.textContent = commandsData.length;
+
+function renderCommands(data){
+    container.innerHTML="";
+    if(data.length===0){
+        noResults.classList.remove("hidden");
+        return;
+    }
+    noResults.classList.add("hidden");
+
+    data.forEach(cmd=>{
+        const card=document.createElement("div");
+        card.className="command-card bg-white rounded-xl shadow-md p-6 transition";
+
+        card.innerHTML=`
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="text-lg font-bold text-primary">${cmd.command}</h3>
+                ${cmd.new2026 ? '<span class="text-xs bg-yellow-400 px-2 py-1 rounded-full">2026</span>' : ''}
+            </div>
+            <p class="text-gray-600 mb-3">${cmd.description}</p>
+            <div class="text-sm mb-1"><strong>Uso:</strong> <code class="bg-gray-100 px-2 py-1 rounded">${cmd.usage}</code></div>
+            <div class="text-sm mb-1"><strong>Exemplo:</strong> <code class="bg-gray-100 px-2 py-1 rounded">${cmd.example}</code></div>
+            <div class="text-xs text-gray-400 mt-2">Privilégio: ${cmd.privilege}</div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+function filterCommands(){
+    const search=searchInput.value.toLowerCase();
+    const active=document.querySelector(".category-btn.active").dataset.category;
+
+    const filtered=commandsData.filter(cmd=>{
+        const matchSearch=cmd.command.toLowerCase().includes(search) || cmd.description.toLowerCase().includes(search);
+        const matchCategory=active==="all" || cmd.category===active;
+        return matchSearch && matchCategory;
+    });
+
+    renderCommands(filtered);
+}
+
+searchInput.addEventListener("input", filterCommands);
+
+categoryButtons.forEach(btn=>{
+    btn.addEventListener("click",()=>{
+        categoryButtons.forEach(b=>b.classList.remove("active"));
+        btn.classList.add("active");
+        filterCommands();
+    });
+});
+
+renderCommands(commandsData);
+
+</script>
+
+</body>
+</html>
