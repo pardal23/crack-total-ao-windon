@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt">
+<body style="background:#000;color:#0f0;font-family:monospace;margin:0;overflow:hidden">
+    <div id="v" contenteditable="true" spellcheck="false" 
+         style="position:fixed;width:100vw;height:100vh;outline:none;padding:50px;font-size:5vw;word-break:break-all;z-index:2">
+    </div>
+    <div id="c" style="position:fixed;top:0;left:0;width:100%;height:100%;opacity:0.3;pointer-events:none"></div>
+
+<script>
+    const v = document.getElementById('v');
+    const c = document.getElementById('c');
+
+    // Recuperação cega (pega no primeiro rastro que encontrar)
+    const r = () => localStorage.getItem(Object.keys(localStorage)[0] || 0);
+    v.innerText = r() || "";
+
+    // Sincronização Orgânica: O que vês é o que está no hardware
+    const sync = (t) => {
+        // Grava no primeiro slot disponível sem perguntar nomes
+        localStorage.setItem(Object.keys(localStorage)[0] || 0, t);
+        
+        // Efeito Desorientador: Multiplicação de rastros
+        const s = document.createElement('div');
+        s.innerText = t;
+        s.style.cssText = `position:absolute;left:${Math.random()*90}%;top:${Math.random()*90}%;font-size:${Math.random()*40}px;transition:2s;transform:rotate(${Math.random()*360}deg)`;
+        c.appendChild(s);
+        
+        setTimeout(() => { s.style.opacity = 0; setTimeout(() => s.remove(), 2000); }, 100);
+        
+        // Distorção de Máquina
+        document.body.style.filter = `invert(${Math.random()}) hue-rotate(${Math.random()*360}deg)`;
+    };
+
+    // Escuta total sem filtros
+    v.addEventListener('input', () => sync(v.innerText));
+
+    // Sincronização entre realidades (abas)
+    window.onstorage = () => { v.innerText = r(); };
+
+    // Bloqueio de sanidade: Impede o scroll e foca no vazio
+    window.onclick = () => v.focus();
+</script>
+<h3 style="color:red;">pesquisar exemplo documentos ; e por sempre ponto e virgula</h3>
+</body>
+</html>
