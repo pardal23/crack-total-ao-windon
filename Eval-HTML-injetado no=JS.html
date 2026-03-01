@@ -1,0 +1,86 @@
+<div id="portal-quantico-root"></div>
+
+<script type="text/javascript">
+(function() {
+    // 1. O CORPO DA QUINTA DIMENSÃO (HTML INJETADO)
+    const root = document.getElementById('portal-quantico-root');
+    root.innerHTML = `
+        <div id="universo-base">
+            <h1 id="titulo-cosmico">Quinta dimensão cósmica</h1>
+            <div id="portal-imagem"></div>
+            <div class="verso-infinito" id="v1">No átomo do tempo, a verdade seduz...</div>
+            <div class="verso-infinito" id="v2">O caminho é a vida, a palavra é JESUS</div>
+            
+            <div class="painel-controle">
+                <input type="text" id="comando-vontade" placeholder="DIGITE SUA VONTADE QUÂNTICA...">
+                <button onclick="ignicaoCosmica()">SINTETIZAR ⚡</button>
+            </div>
+        </div>
+    `;
+
+    // 2. A GEOMETRIA SAGRADA (CSS DINÂMICO)
+    const estilo = document.createElement('style');
+    estilo.innerHTML = `
+        #universo-base { 
+            background: radial-gradient(circle at center, #0a0a2a 0%, #000 100%);
+            color: #00ff41; font-family: 'Courier New', monospace;
+            height: 600px; width: 100%; position: relative;
+            overflow: hidden; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; perspective: 1000px;
+            border: 2px solid #00ff41; margin: 20px 0;
+        }
+        #titulo-cosmico { font-size: 2rem; text-align: center; text-shadow: 0 0 15px #00ff41; animation: flutuar 4s infinite; }
+        #portal-imagem { 
+            width: 200px; height: 200px; border-radius: 50%; 
+            border: 2px solid #00ff41; box-shadow: 0 0 40px #7000ff;
+            background: url('https://images.unsplash.com') center/cover;
+            animation: pulso 5s infinite; filter: hue-rotate(45deg);
+        }
+        .verso-infinito { 
+            position: absolute; color: #fff; font-weight: bold;
+            text-shadow: 0 0 10px #7000ff; white-space: nowrap;
+            animation: orbita360 12s linear infinite;
+        }
+        #v2 { animation-delay: -6s; }
+        .painel-controle { 
+            position: absolute; bottom: 20px; width: 90%; 
+            display: flex; gap: 10px; background: rgba(0,0,0,0.7); padding: 10px; 
+        }
+        #comando-vontade { flex: 1; background: transparent; border: 1px solid #00ff41; color: #00ff41; padding: 8px; outline: none; }
+        @keyframes orbita360 {
+            from { transform: rotateY(0deg) translateZ(180px) rotateY(0deg); }
+            to { transform: rotateY(360deg) translateZ(180px) rotateY(-360deg); }
+        }
+        @keyframes flutuar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        @keyframes pulso { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); box-shadow: 0 0 60px #00ff41; } }
+    `;
+    document.head.appendChild(estilo);
+
+    // 3. O MOTOR DE EXECUÇÃO (JS EVAL/LOGIC)
+    window.ignicaoCosmica = function() {
+        const input = document.getElementById('comando-vontade');
+        const vontade = input.value.toLowerCase();
+        
+        try {
+            // Raciocínio de Transmutação
+            if (vontade.includes("fogo") || vontade.includes("vermelho")) {
+                document.getElementById('universo-base').style.background = "radial-gradient(circle, #4d0000 0%, #000 100%)";
+            }
+            if (vontade.includes("luz") || vontade.includes("branco")) {
+                document.getElementById('titulo-cosmico').style.color = "#fff";
+                document.getElementById('titulo-cosmico').style.textShadow = "0 0 30px #fff";
+            }
+            
+            // O EVAL: Liberdade para o usuário visionário injetar código real
+            if (vontade.startsWith("v8:")) {
+                eval(vontade.replace("v8:", ""));
+            }
+
+            console.log("Sincronia quântica: " + vontade);
+            input.value = "";
+        } catch (e) {
+            console.error("Colapso: " + e.message);
+        }
+    };
+})();
+</script>
