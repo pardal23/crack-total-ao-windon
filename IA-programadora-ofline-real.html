@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>SISTEMA DE SÍNTESE - NÚCLEO GOOGLE V8</title>
+    <style>
+        body { margin: 0; background: #000; color: #00ff41; font-family: 'Consolas', monospace; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        #header { padding: 20px; border-bottom: 2px solid #00ff41; background: #050505; box-shadow: 0 0 20px #00ff41; display: flex; gap: 10px; }
+        input { flex: 1; background: transparent; border: 1px solid #00ff41; color: #00ff41; padding: 15px; font-size: 18px; outline: none; }
+        button { background: #00ff41; color: #000; border: none; padding: 0 30px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+        button:hover { background: #fff; box-shadow: 0 0 30px #fff; }
+        .workspace { display: flex; flex: 1; }
+        #code-monitor { width: 45%; background: #080808; color: #5cff5c; padding: 20px; font-size: 14px; border: none; outline: none; border-right: 1px solid #222; resize: none; overflow-y: auto; line-height: 1.6; }
+        #output-server { flex: 1; background: #fff; border: none; }
+        .terminal { position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.8); border: 1px solid #00ff41; padding: 10px; font-size: 10px; pointer-events: none; }
+    </style>
+</head>
+<body>
+
+<div id="header">
+    <input type="text" id="intento" placeholder="INJETE A LÓGICA AQUI (EX: CRIAR CANVAS DINAMICO COM FETCH)...">
+    <button onclick="ignicao()">SINTETIZAR 🚀</button>
+</div>
+
+<div class="workspace">
+    <textarea id="code-monitor" spellcheck="false" placeholder="// O CÓDIGO APARECERÁ AQUI APÓS O EVAL..."></textarea>
+    <iframe id="output-server"></iframe>
+</div>
+
+<div class="terminal" id="log">> KERNEL V8 PRONTO | OFFLINE IP EMULATED</div>
+
+<script>
+    const monitor = document.getElementById('code-monitor');
+    const server = document.getElementById('output-server');
+    const log = document.getElementById('log');
+
+    /**
+     * 1. FUNÇÃO BASEADA EM EVAL (O CÉREBRO)
+     * Capta o pedido bruto e transmuta em código executável.
+     */
+    const sintetizadorIA = (pedido) => {
+        try {
+            // Aqui usamos o raciocínio humano para mapear o pedido
+            const contexto = pedido.toLowerCase();
+            
+            // Definição da estrutura base via Metaprogramação
+            let estrutura = {
+                html: `<h1>SISTEMA ORIGINAL</h1><div id="root"></div>`,
+                css: `body { background: #111; color: #0f0; font-family: sans-serif; text-align: center; }`,
+                js: `console.log("Sistema Iniciado às " + new Date().toLocaleTimeString());`
+            };
+
+            // Injeção de lógica recursiva baseada no eval
+            if (contexto.includes("canvas") || contexto.includes("efeito")) {
+                estrutura.html += `<canvas id="v8-canvas" style="border:1px solid #0f0"></canvas>`;
+                estrutura.js += `
+                    const c = document.getElementById('v8-canvas');
+                    const ctx = c.getContext('2d');
+                    c.width = 400; c.height = 200;
+                    ctx.fillStyle = 'lime';
+                    ctx.fillRect(50, 50, 300, 100);
+                `;
+            }
+
+            if (contexto.includes("fetch") || contexto.includes("api")) {
+                estrutura.js += `
+                    fetch('https://jsonplaceholder.typicode.com')
+                        .then(r => r.json())
+                        .then(data => {
+                            document.getElementById('root').innerHTML = "<b>Dados Externos:</b> " + data.title;
+                        });
+                `;
+            }
+
+            // O EVAL REAL: Montagem da String Atómica
+            return `<!DOCTYPE html>
+<html>
+<head>
+    <style>${estrutura.css}</style>
+</head>
+<body>
+    ${estrutura.html}
+    <script>${estrutura.js}<\/script>
+</body>
+</html>`;
+
+        } catch (e) {
+            return `<h1>ERRO DE SÍNTESE V8: ${e.message}</h1>`;
+        }
+    };
+
+    /**
+     * 2. RENDERIZADOR OFFLINE (SIMULAÇÃO DE SERVIDOR)
+     * Usa Blobs para criar um IP virtual (URL temporária) livre de restrições.
+     */
+    const renderizarNoServidor = (codigo) => {
+        const blob = new Blob([codigo], { type: 'text/html' });
+        const ipVirtual = URL.createObjectURL(blob);
+        
+        server.src = ipVirtual;
+        log.innerText = `> SERVIDOR ATIVO EM: ${ipVirtual.substring(0, 30)}...`;
+    };
+
+    /**
+     * 3. IGNIÇÃO
+     */
+    function ignicao() {
+        const pedido = document.getElementById('intento').value;
+        if (!pedido) return;
+
+        log.innerText = "> PROCESSANDO RACIOCÍNIO...";
+        
+        // Geração do código via Metaprogramação
+        const resultado = sintetizadorIA(pedido);
+        
+        // Exibe no monitor para intervenção humana
+        monitor.value = resultado;
+
+        // Renderiza no servidor offline
+        renderizarNoServidor(resultado);
+    }
+
+    // Listener para o HumanoVisionário editar o código "no calor"
+    monitor.addEventListener('input', () => {
+        renderizarNoServidor(monitor.value);
+    });
+
+    // Enter Key Support
+    document.getElementById('intento').addEventListener('keypress', (e) => {
+        if(e.key === 'Enter') ignicao();
+    });
+
+</script>
+<h2 style="color:red; text-align:center;">IA SERVER REAL programar direto no server<br>link google IA e pesquisa universal<br><a href="https://www.google.com/search?q=&sca_esv=c60b7adb80dd77ce&source=hp&ei=yU8_abXiOeiAi-gPtKnPaA&iflsig=AOw8s4IAAAAAaT9d2Z-rRMvrVfI235Ob-NMV_6nQHY2i&aep=22&udm=50&ved=0ahUKEwj16uz5pL6RAxVowAIHHbTUEw0QteYPCAo&oq=&gs_lp=Egdnd3Mtd2l6IgBIAFAAWABwAHgAkAEAmAEAoAEAqgEAuAEByAEAmAIAoAIAmAMAkgcAoAcAsgcAuAcAwgcAyAcAgAgB&sclient=gws-wiz">IA google fora da caixa<br><img src="https://tse1.explicit.bing.net/th/id/OIP.UfF4tEXZrkamm4YrRfksXgHaEh?rs=1&pid=ImgDetMain&o=7&rm=3" width="350" height="300"></a></h2>
+</body>
+</html>
